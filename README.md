@@ -8,7 +8,7 @@ Most AI coding sessions start the same way: re-explain the stack, re-establish c
 
 ## Features
 
-- **Ready-to-use skills** — structured instructions that guide Claude through specific tasks like writing READMEs, generating CLAUDE.md files, and fixing bugs from GitHub issues
+- **Ready-to-use skills** — structured instructions that guide Claude through specific tasks like writing READMEs, generating CLAUDE.md files, fixing bugs, reviewing code, and editing content
 - **CLAUDE.md templates** — starter templates so Claude understands your project from the first prompt
 - **No dependencies, no build step** — pure Markdown, copy what you need
 
@@ -20,9 +20,11 @@ Most AI coding sessions start the same way: re-explain the stack, re-establish c
 
 | Skill | Description |
 |---|---|
-| [claudemd-generator](skills/claudemd-generator/SKILL_claudemd-generator.md) | Generate a complete, production-ready CLAUDE.md for any project |
+| [claudemd-generator](skills/claudmd-generator/SKILL_claudemd-generator.md) | Generate a complete, production-ready CLAUDE.md for any project |
 | [readme-writer](skills/readme-writer/SKILL_readme-writer.md) | Generate a professional README.md tailored to a specific project |
 | [bug-fix](skills/bug-fix/SKILL_bug-fix.md) | Fix GitHub issues with a disciplined, scope-limited process |
+| [code-review](skills/code-review/SKILL_code-review.md) | Review code critically and return a structured PASS or FAIL with actionable feedback |
+| [content-editor](skills/content-editor/SKILL_content-editor.md) | Edit and improve written content with SEO optimization and AI slop elimination |
 
 ### Templates
 
@@ -83,8 +85,12 @@ ai-workflow-toolkit/
 ├── skills/
 │   ├── bug-fix/
 │   │   └── SKILL_bug-fix.md
-│   ├── claudemd-generator/
+│   ├── claudmd-generator/
 │   │   └── SKILL_claudemd-generator.md
+│   ├── code-review/
+│   │   └── SKILL_code-review.md
+│   ├── content-editor/
+│   │   └── SKILL_content-editor.md
 │   └── readme-writer/
 │       └── SKILL_readme-writer.md
 ├── templates/
