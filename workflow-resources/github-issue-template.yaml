@@ -1,0 +1,56 @@
+# copy to `.github/ISSUE_TEMPLATE/feature.yaml
+name: Feature
+description: New feature or enhancement
+labels: ["feat"]
+body:
+  - type: textarea
+    id: what-and-why
+    attributes:
+      label: What & why
+      description: One to two sentences. What are you building, and why does it matter?
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What's explicitly IN scope for this issue?
+    validations:
+      required: true
+
+  - type: textarea
+    id: non-goals
+    attributes:
+      label: Non-goals
+      description: What's explicitly OUT of scope? Prevents creep.
+    validations:
+      required: true
+
+  - type: textarea
+    id: done-when
+    attributes:
+      label: Done when
+      description: How do you know this is complete? Be specific.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Break the work into checklist items, each completable in one sitting.
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / context
+      description: Links, decisions, constraints, anything future-you needs to know.
+    validations:
+      required: false
