@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solo Dev Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #e8e6e0;
+    --muted: #888;
+    --purple: #9b7fff;
+    --purple-dim: #2d2040;
+    --teal: #3ecfb2;
+    --teal-dim: #0d2e28;
+    --blue: #5ba8f5;
+    --blue-dim: #0d1e35;
+    --amber: #f5a623;
+    --amber-dim: #2e1f05;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    padding: 48px 32px;
+  }
+
+  header {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    border-left: 3px solid var(--purple);
+    padding-left: 20px;
+  }
+
+  header h1 {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  header p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
+  .workflow {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .phase:hover { border-color: #3a3a3a; }
+
+  .phase-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  .phase-capture .phase-label { background: var(--purple-dim); color: var(--purple); }
+  .phase-plan    .phase-label { background: var(--teal-dim);   color: var(--teal);   }
+  .phase-build   .phase-label { background: var(--blue-dim);   color: var(--blue);   }
+  .phase-ship    .phase-label { background: var(--amber-dim);  color: var(--amber);  }
+
+  .steps {
+    display: flex;
+    align-items: stretch;
+    padding: 16px;
+    gap: 0;
+    background: var(--surface);
+  }
+
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .step:hover { background: rgba(255,255,255,0.04); }
+
+  .step + .step::before {
+    content: '→';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .step-title {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .step-sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .phase-capture .step-title { color: var(--purple); }
+  .phase-plan    .step-title { color: var(--teal);   }
+  .phase-build   .step-title { color: var(--blue);   }
+  .phase-ship    .step-title { color: var(--amber);  }
+
+  .connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .detail-panel {
+    max-width: 900px;
+    margin: 32px auto 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    display: none;
+  }
+
+  .detail-panel.active { display: block; }
+
+  .detail-panel h2 {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .detail-panel p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c0bdb5;
+  }
+
+  .detail-panel code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: var(--text);
+  }
+
+  footer {
+    max-width: 900px;
+    margin: 48px auto 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #444;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>solo dev workflow</h1>
+  <p>idea → github issue → branch → ship → retro</p>
+</header>
+
+<div class="workflow">
+
+  <div class="phase phase-capture">
+    <div class="phase-label">Capture</div>
+    <div class="steps">
+      <div class="step" onclick="show('idea-strikes')">
+        <div class="step-title">Idea strikes</div>
+        <div class="step-sub">One-liner in IDEA.md</div>
+      </div>
+      <div class="step" onclick="show('triage')">
+        <div class="step-title">Quick triage</div>
+        <div class="step-sub">Project? Scope? Priority?</div>
+      </div>
+      <div class="step" onclick="show('github-issue')">
+        <div class="step-title">GitHub issue</div>
+        <div class="step-sub">Label + milestone + project</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">↓</div>
+
+  <div class="phase phase-plan">
+    <div class="phase-label">Plan</div>
+    <div class="steps">
+      <div class="step" onclick="show('feature-brief')">
+        <div class="step-title">Feature brief</div>
+        <div class="step-sub">Goal, scope, non-goals</div>
+      </div>
+      <div class="step" onclick="show('task-breakdown')">
+        <div class="step-title">Task breakdown</div>
+        <div class="step-sub">Checklist on the issue</div>
+      </div>
+      <div class="step" onclick="show('branch-cut')">
+        <div class="step-title">Branch cut</div>
+        <div class="step-sub">feat/issue-#-slug</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">↓</div>
+
+  <div class="phase phase-build">
+    <div class="phase-label">Build</div>
+    <div class="steps">
+      <div class="step" onclick="show('small-commits')">
+        <div class="step-title">Small commits</div>
+        <div class="step-sub">Conventional commit msgs</div>
+      </div>
+      <div class="step" onclick="show('context-switch')">
+        <div class="step-title">Context switch</div>
+        <div class="step-sub">Leave a breadcrumb note</div>
+      </div>
+      <div class="step" onclick="show('wip-pr')">
+        <div class="step-title">WIP PR (optional)</div>
+        <div class="step-sub">Draft PR as checkpoint</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">↓</div>
+
+  <div class="phase phase-ship">
+    <div class="phase-label">Ship</div>
+    <div class="steps">
+      <div class="step" onclick="show('pr-review')">
+        <div class="step-title">PR self-review</div>
+        <div class="step-sub">Close issue, update docs</div>
+      </div>
+      <div class="step" onclick="show('deploy')">
+        <div class="step-title">Deploy</div>
+        <div class="step-sub">Env vars, migrations, test</div>
+      </div>
+      <div class="step" onclick="show('retro')">
+        <div class="step-title">Retro note</div>
+        <div class="step-sub">What slowed you down?</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="detail-panel" id="detail">
+  <h2 id="detail-title"></h2>
+  <p id="detail-body"></p>
+</div>
+
+<footer>click any step for details</footer>
+
+<script>
+const details = {
+  'idea-strikes': {
+    title: 'idea strikes',
+    body: 'Keep a single <code>IDEA.md</code> per project (or one global backlog). Write a one-liner the moment the idea surfaces — no polish required. The goal is capture, not refinement. Date it. Move on.'
+  },
+  'triage': {
+    title: 'quick triage',
+    body: 'Ask three questions: Which project does this belong to? What\'s the rough scope — hour, day, or sprint? Is it worth a GitHub issue, or is it a future someday/maybe? Triage is fast, not perfect.'
+  },
+  'github-issue': {
+    title: 'github issue',
+    body: 'Every real work item lives in GitHub. Add a label (feat, bug, chore, docs), assign a milestone if timing matters, and attach it to a project board column. This is the single source of truth for what you\'re building and why.'
+  },
+  'feature-brief': {
+    title: 'feature brief',
+    body: 'Two to four sentences max. State the goal ("users can X"), the scope ("only affects Y flow"), and the explicit non-goals ("not touching Z yet"). Write it as a comment on the issue. This saves you from scope creep and from re-figuring out intent when you context-switch.'
+  },
+  'task-breakdown': {
+    title: 'task breakdown',
+    body: 'Add a GitHub-flavored markdown checklist directly on the issue. Each item should be completable in one sitting. This gives you a to-do list, a progress indicator, and a record of what actually shipped — all in one place.'
+  },
+  'branch-cut': {
+    title: 'branch cut',
+    body: 'Name the branch <code>feat/42-socratic-coach-ui</code> — type, issue number, short slug. The issue number ties the branch to your planning instantly. Cut from <code>main</code> (or <code>dev</code> if you run a two-branch model). Never work directly on main.'
+  },
+  'small-commits': {
+    title: 'small commits',
+    body: 'Use conventional commit format: <code>feat:</code>, <code>fix:</code>, <code>chore:</code>, <code>docs:</code>, <code>refactor:</code>. Commit when a discrete thing works, not just at end-of-session. Small commits make git log readable, diffs reviewable, and rollbacks surgical.'
+  },
+  'context-switch': {
+    title: 'context switch',
+    body: 'Before closing your editor, leave a breadcrumb. A <code>// TODO: next — wire Supabase call in useCoach.ts</code> comment in the code, or a quick note on the GitHub issue. This is the single highest-leverage habit for multi-project chaos. Future you will thank present you.'
+  },
+  'wip-pr': {
+    title: 'WIP / draft PR',
+    body: 'Open a draft PR early if a feature will span multiple sessions. It gives you a visual diff, a comment thread for notes, and a psychological checkpoint. Prefix the title with <code>[WIP]</code> or use GitHub\'s Draft PR feature. Convert to ready when the checklist on the issue is complete.'
+  },
+  'pr-review': {
+    title: 'PR self-review',
+    body: 'Read your own diff before merging. Check that the linked issue is closed, CHANGELOG or docs are updated, no debug code sneaked in, and the PR description explains the change for future-you. Merge via squash to keep main history clean.'
+  },
+  'deploy': {
+    title: 'deploy',
+    body: 'Run through a checklist every time: env vars set in production? DB migrations run? Build passes? Smoke test the happy path live. For Next.js projects: check Vercel build logs, run <code>next build</code> locally first if anything touched config.'
+  },
+  'retro': {
+    title: 'retro note',
+    body: 'One sentence is enough. "Deploy failed because migrations weren\'t run — add to deploy checklist." "Feature took 3x longer because scope wasn\'t locked — write the brief first." Keep these in a <code>RETRO.md</code> or as a pinned issue comment. Review monthly.'
+  }
+};
+
+function show(key) {
+  const d = details[key];
+  if (!d) return;
+  document.getElementById('detail-title').textContent = d.title;
+  document.getElementById('detail-body').innerHTML = d.body;
+  const panel = document.getElementById('detail');
+  panel.classList.add('active');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>

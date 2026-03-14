@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deploy Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #161616;
+    --border: #252525;
+    --text: #e8e6e0;
+    --muted: #555;
+    --green: #3ecfb2;
+    --green-dim: #0a1f1b;
+    --amber: #f5a623;
+    --red: #f56b5b;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    padding: 48px 32px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 36px;
+  }
+
+  header h1 {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  header p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    margin: 20px 0 32px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 1px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-header {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1a1a;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s;
+  }
+
+  .item:last-child { border-bottom: none; }
+
+  .item:hover { opacity: 0.85; }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    font-size: 11px;
+    color: transparent;
+  }
+
+  .item.done .checkbox {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .item.done .item-text {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: #333;
+  }
+
+  .item-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #c0bdb5;
+    flex: 1;
+  }
+
+  .item-text code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: #1c1c1c;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--amber);
+  }
+
+  .item-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .tag-critical { background: #2a0a0a; color: var(--red); }
+  .tag-next    { background: #1f2208; color: #a3c44a; }
+
+  .counter {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 24px;
+  }
+
+  .counter span { color: var(--green); }
+
+  .reset-btn {
+    display: block;
+    margin: 24px auto 0;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .reset-btn:hover {
+    border-color: #444;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>deploy checklist</h1>
+  <p>run before every production push</p>
+</header>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="section">
+  <div class="section-header">before you push</div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">All checklist items on the GitHub issue are ticked</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Branch is up to date with <code>main</code> (rebased or merged)</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Ran <code>next build</code> locally — zero errors</div>
+    <div class="item-tag tag-critical">critical</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">No debug logs, <code>console.log</code>, or commented-out blocks left in</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">TypeScript passes: <code>tsc --noEmit</code> clean</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">environment</div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">All new <code>.env</code> vars added to Vercel (or host) environment</div>
+    <div class="item-tag tag-critical">critical</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Supabase RLS policies reviewed for any new tables or columns</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">No secrets or API keys in source code or commit history</div>
+    <div class="item-tag tag-critical">critical</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">database</div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Migrations written and tested locally</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Migrations applied to production Supabase before deploying app</div>
+    <div class="item-tag tag-critical">critical</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">No breaking schema changes without a migration path</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">after deploy</div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Vercel build logs green — no warnings that look like errors</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">Smoke test the happy path in production (not just staging)</div>
+    <div class="item-tag tag-critical">critical</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">GitHub issue closed and linked PR merged</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">CHANGELOG or docs updated if behavior changed</div>
+  </div>
+  <div class="item" onclick="toggle(this)">
+    <div class="checkbox">✓</div>
+    <div class="item-text">One-line retro note added: what almost went wrong?</div>
+    <div class="item-tag tag-next">retro</div>
+  </div>
+</div>
+
+<div class="counter"><span id="count">0</span> / <span id="total">0</span> complete</div>
+<button class="reset-btn" onclick="reset()">reset checklist</button>
+
+<script>
+  const items = document.querySelectorAll('.item');
+  document.getElementById('total').textContent = items.length;
+
+  function toggle(el) {
+    el.classList.toggle('done');
+    update();
+  }
+
+  function update() {
+    const done = document.querySelectorAll('.item.done').length;
+    const total = items.length;
+    document.getElementById('count').textContent = done;
+    document.getElementById('progress').style.width = (done / total * 100) + '%';
+  }
+
+  function reset() {
+    document.querySelectorAll('.item.done').forEach(el => el.classList.remove('done'));
+    update();
+  }
+
+  update();
+</script>
+
+</body>
+</html>

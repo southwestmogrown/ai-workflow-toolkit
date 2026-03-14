@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commit Message Cheat Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #161616;
+    --border: #252525;
+    --text: #e8e6e0;
+    --muted: #666;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    padding: 48px 32px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+    color: var(--text);
+  }
+
+  h2 {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 28px 0 12px;
+  }
+
+  .type-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 2px;
+  }
+
+  .type-row {
+    display: contents;
+  }
+
+  .type-tag {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .type-desc {
+    font-size: 13px;
+    font-family: var(--sans);
+    padding: 10px 14px;
+    background: var(--surface);
+    border-radius: 0 4px 4px 0;
+    color: #b0ada6;
+    display: flex;
+    align-items: center;
+  }
+
+  .feat   { background: #0d2040; color: #5ba8f5; }
+  .fix    { background: #1e0d0d; color: #f56b5b; }
+  .chore  { background: #1a1a1a; color: #888; }
+  .docs   { background: #0d2e28; color: #3ecfb2; }
+  .ref    { background: #2d2040; color: #9b7fff; }
+  .test   { background: #1f2208; color: #a3c44a; }
+  .perf   { background: #2e1f05; color: #f5a623; }
+
+  .structure {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin: 12px 0;
+  }
+
+  .structure .line {
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  .token { color: #9b7fff; }
+  .scope { color: #3ecfb2; }
+  .break { color: #f56b5b; }
+  .msg   { color: #e8e6e0; }
+  .dim   { color: var(--muted); }
+
+  .examples {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 12px 0;
+  }
+
+  .example {
+    background: var(--surface);
+    border-left: 2px solid var(--border);
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.6;
+  }
+
+  .example .good { color: #3ecfb2; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .example .bad  { color: #f56b5b; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  .rules {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 12px 0;
+  }
+
+  .rule {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    font-size: 13px;
+    font-family: var(--sans);
+    color: #b0ada6;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+
+  .rule:last-child { border-bottom: none; }
+
+  .check { color: #3ecfb2; font-family: var(--mono); }
+
+  footer {
+    margin-top: 48px;
+    font-size: 11px;
+    color: #333;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>commit message cheat sheet</h1>
+
+<h2>structure</h2>
+<div class="structure">
+  <div class="line"><span class="token">type</span><span class="dim">(</span><span class="scope">scope</span><span class="dim">)</span><span class="break">!</span><span class="dim">: </span><span class="msg">short description</span></div>
+  <div class="line dim">↑ required  ↑ optional  ↑ breaking  ↑ required, imperative, ≤72 chars</div>
+</div>
+
+<h2>types</h2>
+<div class="type-grid">
+  <div class="type-row">
+    <div class="type-tag feat">feat</div>
+    <div class="type-desc">new feature or capability</div>
+  </div>
+  <div class="type-row">
+    <div class="type-tag fix">fix</div>
+    <div class="type-desc">bug fix</div>
+  </div>
+  <div class="type-row">
+    <div class="type-tag chore">chore</div>
+    <div class="type-desc">tooling, config, deps — no production code change</div>
+  </div>
+  <div class="type-row">
+    <div class="type-tag docs">docs</div>
+    <div class="type-desc">documentation only</div>
+  </div>
+  <div class="type-row">
+    <div class="type-tag ref">refactor</div>
+    <div class="type-desc">restructure without behavior change</div>
+  </div>
+  <div class="type-row">
+    <div class="type-tag test">test</div>
+    <div class="type-desc">add or update tests</div>
+  </div>
+  <div class="type-row">
+    <div class="type-tag perf">perf</div>
+    <div class="type-desc">performance improvement</div>
+  </div>
+</div>
+
+<h2>examples</h2>
+<div class="examples">
+  <div class="example">
+    <span class="good">✓ good</span>
+    feat(coach): add Supabase pgvector similarity search
+  </div>
+  <div class="example">
+    <span class="good">✓ good</span>
+    fix(auth): redirect loop on expired session token
+  </div>
+  <div class="example">
+    <span class="good">✓ good</span>
+    chore: upgrade next to 15.2.1
+  </div>
+  <div class="example">
+    <span class="good">✓ good — breaking change</span>
+    feat(api)!: rename /lessons endpoint to /modules
+  </div>
+  <div class="example">
+    <span class="bad">✗ too vague</span>
+    fix stuff
+  </div>
+  <div class="example">
+    <span class="bad">✗ past tense</span>
+    added socratic coach feature
+  </div>
+  <div class="example">
+    <span class="bad">✗ too long</span>
+    feat: add the new socratic coaching mode to quizquest with supabase vector search integration and claude api
+  </div>
+</div>
+
+<h2>rules</h2>
+<div class="rules">
+  <div class="rule"><span class="check">→</span><span>Subject line: imperative mood ("add", not "added" or "adds")</span></div>
+  <div class="rule"><span class="check">→</span><span>Subject line: ≤72 characters, no period at end</span></div>
+  <div class="rule"><span class="check">→</span><span>Scope: the module, page, or domain affected — optional but useful</span></div>
+  <div class="rule"><span class="check">→</span><span>Body (optional): blank line after subject, then explain the WHY not the WHAT</span></div>
+  <div class="rule"><span class="check">→</span><span>Breaking changes: append <code>!</code> after type/scope, explain in body</span></div>
+  <div class="rule"><span class="check">→</span><span>Reference issues: close with <code>Closes #42</code> or <code>Refs #42</code> in body</span></div>
+  <div class="rule"><span class="check">→</span><span>One logical change per commit — don't bundle unrelated changes</span></div>
+</div>
+
+<footer>conventional commits spec · conventionalcommits.org</footer>
+
+</body>
+</html>
