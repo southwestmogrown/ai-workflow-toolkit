@@ -10,6 +10,7 @@ Most AI coding sessions start the same way: re-explain the stack, re-establish c
 
 - **Ready-to-use skills** — structured instructions that guide Claude through specific tasks like writing READMEs, generating CLAUDE.md files, fixing bugs, reviewing code, and editing content
 - **CLAUDE.md templates** — starter templates so Claude understands your project from the first prompt
+- **Workflow resources** — standalone files for idea tracking, retros, deploy checklists, commit conventions, and more
 - **No dependencies, no build step** — pure Markdown, copy what you need
 
 ---
@@ -31,6 +32,19 @@ Most AI coding sessions start the same way: re-explain the stack, re-establish c
 | Template | Description |
 |---|---|
 | [CLAUDE.md](templates/CLAUDE.md) | Starter CLAUDE.md template for any repository |
+
+### Workflow Resources
+
+Standalone files you can drop into any project to support a repeatable solo dev workflow.
+
+| Resource | Description |
+|---|---|
+| [IDEA.md](workflow-resources/IDEA.md) | Idea backlog — dump ideas fast, triage weekly |
+| [RETRO.md](workflow-resources/RETRO.md) | Retro log — one sentence per deploy, review monthly |
+| [github-issue-template.md](workflow-resources/github-issue-template.md) | GitHub issue template for features with scope, non-goals, and done criteria |
+| [commit-cheatsheet.html](workflow-resources/commit-cheatsheet.html) | Commit message cheat sheet — conventional commits reference |
+| [deploy-checklist.html](workflow-resources/deploy-checklist.html) | Pre-deploy checklist — catch the things that always get missed |
+| [workflow-diagram.html](workflow-resources/workflow-diagram.html) | Solo dev workflow diagram — visual overview of the full development cycle |
 
 ---
 
@@ -76,6 +90,17 @@ cp templates/CLAUDE.md /path/to/your/project/CLAUDE.md
 
 Claude reads `CLAUDE.md` automatically at the start of every session — no extra prompting required.
 
+### Using a Workflow Resource
+
+Copy any file from `workflow-resources/` into your project:
+
+```bash
+cp workflow-resources/IDEA.md /path/to/your/project/IDEA.md
+cp workflow-resources/deploy-checklist.html /path/to/your/project/deploy-checklist.html
+```
+
+Open the HTML files directly in a browser. The Markdown files work as standalone documents in any editor.
+
 ---
 
 ## Project Structure
@@ -95,6 +120,13 @@ ai-workflow-toolkit/
 │       └── SKILL_readme-writer.md
 ├── templates/
 │   └── CLAUDE.md
+├── workflow-resources/
+│   ├── IDEA.md
+│   ├── RETRO.md
+│   ├── commit-cheatsheet.html
+│   ├── deploy-checklist.html
+│   ├── github-issue-template.md
+│   └── workflow-diagram.html
 ├── LICENSE
 └── README.md
 ```
